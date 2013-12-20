@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # A more capable sbt runner, coincidentally also called sbt.
 # Author: Paul Phillips <paulp@typesafe.com>
@@ -109,7 +109,7 @@ readarr () {
 init_default_option_file () {
   local overriding_var=${!1}
   local default_file=$2
-  if [[ ! -r "$default_file" && $overriding_var =~ ^@(.*)$ ]]; then
+  if [[ ! -r "$default_file"  ]]; then
     local envvar_file=${BASH_REMATCH[1]}
     if [[ -r $envvar_file ]]; then
       default_file=$envvar_file
@@ -377,7 +377,7 @@ readConfigFile() {
 if [[ -r "$sbt_opts_file" ]]; then
   vlog "Using sbt options defined in file $sbt_opts_file"
   readarr extra_sbt_opts < <(readConfigFile "$sbt_opts_file")
-elif [[ -n "$SBT_OPTS" && ! ($SBT_OPTS =~ ^@.*) ]]; then
+elif [[ -n "$SBT_OPTS" ]]; then
   vlog "Using sbt options defined in variable \$SBT_OPTS"
   extra_sbt_opts=( $SBT_OPTS )
 else
@@ -449,7 +449,7 @@ fi
 if [[ -r "$jvm_opts_file" ]]; then
   vlog "Using jvm options defined in file $jvm_opts_file"
   readarr extra_jvm_opts < <(readConfigFile "$jvm_opts_file")
-elif [[ -n "$JVM_OPTS" && ! ($JVM_OPTS =~ ^@.*) ]]; then
+elif [[ -n "$JVM_OPTS" ]]; then
   vlog "Using jvm options defined in \$JVM_OPTS variable"
   extra_jvm_opts=( $JVM_OPTS )
 else
